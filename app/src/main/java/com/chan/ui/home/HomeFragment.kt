@@ -6,6 +6,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.chan.MyApplication
 import com.chan.R
 import com.chan.common.ListScrollEvent
 import com.chan.common.base.BaseFragment
@@ -21,10 +22,14 @@ import com.chan.ui.home.remote.SearchProductRemoteDataSource
 import com.chan.ui.home.repository.GoodChoiceRepository
 import com.chan.ui.home.viewmodel.HomeViewModel
 import com.orhanobut.logger.Logger
+import javax.inject.Inject
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(
     R.layout.fragment_home
 ) {
+
+    @Inject
+    lateinit var txtHelloWorld: String
 
     private val activityResultLauncher: ActivityResultLauncher<ProductDetailContractData> =
         registerForActivityResult(
@@ -33,6 +38,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             (binding.rvProduct.adapter as ProductListAdapter).notifyItemChanged(result.position)
             Logger.d("registerForActivityResult >>> position is ${result.position} ")
         }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        injectionDependency()
+        super.onCreate(savedInstanceState)
+    }
+
+    private fun injectionDependency(){
+        //Dagger to inject our dependencies
+        (activity?.application as MyApplication).homeComponent.inject(this)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,7 +59,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     }
 
     private fun injectComponent(){
-
+        Logger.d("injectComponent >>> txtHelloWorld is $txtHelloWorld ")
     }
 
     @Suppress("UNCHECKED_CAST")
