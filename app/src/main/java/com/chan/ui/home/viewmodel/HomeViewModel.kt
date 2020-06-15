@@ -11,9 +11,8 @@ import com.chan.ui.detail.ProductDetailContractData
 import com.chan.ui.home.model.ProductModel
 import com.chan.ui.home.repository.GoodChoiceRepository
 import com.orhanobut.logger.Logger
-import javax.inject.Inject
 
-class HomeViewModel @Inject constructor(
+class HomeViewModel(
     private val activityResultLauncher: ActivityResultLauncher<ProductDetailContractData>,
     private val goodChoiceRepository: GoodChoiceRepository,
     private val bookmarkRepository: BookmarkRepository
