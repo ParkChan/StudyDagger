@@ -14,7 +14,7 @@ class SearchProductRemoteDataSource(
         page: Int,
         onSuccess: (githubInfo: ResProductListModel) -> Unit,
         onFail: (error: String) -> Unit
-    ): Disposable = GoodChoiceApi.create().getProductList(page)
+    ): Disposable = retrofit.getProductList(page)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe({

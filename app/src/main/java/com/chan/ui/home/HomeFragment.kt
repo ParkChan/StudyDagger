@@ -23,6 +23,7 @@ import com.chan.ui.home.repository.GoodChoiceRepository
 import com.chan.ui.home.viewmodel.HomeViewModel
 import com.orhanobut.logger.Logger
 import javax.inject.Inject
+import javax.inject.Named
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(
     R.layout.fragment_home
@@ -30,6 +31,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     @Inject
     lateinit var txtHelloWorld: String
+
+    @Inject
+    @Named("goodChoiceApi")
+    lateinit var goodChoiceApi: GoodChoiceApi
 
     private val activityResultLauncher: ActivityResultLauncher<ProductDetailContractData> =
         registerForActivityResult(
@@ -69,7 +74,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
                 return HomeViewModel(
                     activityResultLauncher,
                     GoodChoiceRepository(
-                        SearchProductRemoteDataSource(GoodChoiceApi.create())
+                        SearchProductRemoteDataSource(goodChoiceApi)
                     ),
                     BookmarkRepository(BookmarkDataSource())
                 ) as T

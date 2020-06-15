@@ -1,8 +1,8 @@
 package com.chan
 
 import android.app.Application
-import com.chan.common.di.DaggerHomeComponent
-import com.chan.common.di.HomeComponent
+import com.chan.ui.home.di.DaggerHomeComponent
+import com.chan.ui.home.di.HomeComponent
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 
