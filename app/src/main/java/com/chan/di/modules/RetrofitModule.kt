@@ -10,36 +10,37 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Named
-import javax.inject.Singleton
 
 @Module
 class RetrofitModule {
 
     @Provides
-    @Singleton
-    fun create(): GoodChoiceApi {
+    internal fun provideHttpLogging(): HttpLoggingInterceptor {
         val logger = HttpLoggingInterceptor()
         logger.level = if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor.Level.BODY
         } else {
             HttpLoggingInterceptor.Level.NONE
         }
+        return logger
 
-        val client = OkHttpClient.Builder()
-            .addInterceptor(logger)
+    }
+
+    @Provides
+    internal fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(provideHttpLogging())
             .build()
+    }
 
+    @Provides
+    internal fun provideRetrofit(): GoodChoiceApi {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(client)
+            .client(provideOkHttpClient())
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
             .create(GoodChoiceApi::class.java)
     }
-
-    @Provides
-    @Named("goodChoiceApi")
-    fun goodChoiceApi(): GoodChoiceApi = create()
 }
