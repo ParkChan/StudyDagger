@@ -1,8 +1,8 @@
-package com.chan.ui.home.di
+package com.chan.di
 
 import android.content.Context
-import com.chan.common.di.modules.AppModule
-import com.chan.common.di.modules.RetrofitModule
+import com.chan.di.modules.AppModule
+import com.chan.di.modules.RetrofitModule
 import com.chan.ui.home.HomeFragment
 import dagger.BindsInstance
 import dagger.Component
@@ -13,11 +13,11 @@ import dagger.Component
         RetrofitModule::class
     ]
 )
-interface HomeComponent {
+interface AppComponent {
 
     @Component.Factory
     interface Factory {
-        fun create(@BindsInstance context: Context): HomeComponent
+        fun create(@BindsInstance context: Context): AppComponent
     }
 
     fun inject(fragment: HomeFragment)

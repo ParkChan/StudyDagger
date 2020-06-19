@@ -1,8 +1,8 @@
-package com.chan.common.di.scope
+package com.chan.di.scope
 
 import javax.inject.Scope
 
 
 @Scope
 @kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
-annotation class ActivityScope
+annotation class FragmentScope

@@ -10,6 +10,7 @@ import com.chan.MyApplication
 import com.chan.R
 import com.chan.common.ListScrollEvent
 import com.chan.common.base.BaseFragment
+import com.chan.common.setRecyclerViewScrollListener
 import com.chan.databinding.FragmentHomeBinding
 import com.chan.network.api.GoodChoiceApi
 import com.chan.ui.bookmark.local.BookmarkDataSource
@@ -21,6 +22,7 @@ import com.chan.ui.home.model.ProductModel
 import com.chan.ui.home.remote.SearchProductRemoteDataSource
 import com.chan.ui.home.repository.GoodChoiceRepository
 import com.chan.ui.home.viewmodel.HomeViewModel
+import com.chan.utils.showToast
 import com.orhanobut.logger.Logger
 import javax.inject.Inject
 import javax.inject.Named
@@ -51,7 +53,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     private fun injectionDependency(){
         //Dagger to inject our dependencies
-        (activity?.application as MyApplication).homeComponent.inject(this)
+        (activity?.application as MyApplication).appComponent.inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,7 +74,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         binding.homeViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 return HomeViewModel(
-                    activityResultLauncher,
                     GoodChoiceRepository(
                         SearchProductRemoteDataSource(goodChoiceApi)
                     ),
@@ -90,7 +91,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         })
         binding.homeViewModel?.errorMessage?.observe(viewLifecycleOwner, Observer {
             Logger.d("homeViewModel observe errorMessage $it")
-            showToast(getString(R.string.common_toast_msg_network_error))
+            context?.let { showToast(it, getString(R.string.common_toast_msg_network_error)) }
+        })
+        binding.homeViewModel?.productItemSelected?.observe(viewLifecycleOwner, Observer {
+            activityResultLauncher.launch(ProductDetailContractData(it.position, it.productModel))
         })
     }
 

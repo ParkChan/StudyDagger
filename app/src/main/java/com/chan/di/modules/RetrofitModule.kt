@@ -1,4 +1,4 @@
-package com.chan.common.di.modules
+package com.chan.di.modules
 
 import com.chan.BuildConfig
 import com.chan.network.BASE_URL

@@ -1,4 +1,4 @@
-package com.chan.common.di.modules
+package com.chan.di.modules
 
 import dagger.Module
 import dagger.Provides
@@ -7,5 +7,4 @@ import dagger.Provides
 class AppModule {
     @Provides
     fun provideHelloWorld() = "Hello World!!"
-
 }
