@@ -10,8 +10,9 @@ import com.chan.ui.bookmark.repository.BookmarkRepository
 import com.chan.ui.detail.ProductDetailContractData
 import com.chan.ui.home.model.DescriptionModel
 import com.chan.ui.home.model.ProductModel
+import javax.inject.Inject
 
-class BookmarkViewModel(
+class BookmarkViewModel @Inject constructor(
     private val bookmarkRepository: BookmarkRepository
 ) : BaseViewModel() {
 

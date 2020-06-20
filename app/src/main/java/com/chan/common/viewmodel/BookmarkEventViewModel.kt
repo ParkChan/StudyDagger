@@ -6,8 +6,9 @@ import androidx.lifecycle.ViewModel
 import com.chan.ui.bookmark.model.BookmarkModel
 import com.chan.ui.home.model.DescriptionModel
 import com.chan.ui.home.model.ProductModel
+import javax.inject.Inject
 
-class BookmarkEventViewModel: ViewModel() {
+class BookmarkEventViewModel @Inject constructor(): ViewModel() {
 
     private val _deleteProductModel = MutableLiveData<ProductModel>()
     var deleteProductModel: LiveData<ProductModel> = _deleteProductModel

@@ -10,8 +10,9 @@ import com.chan.ui.detail.ProductDetailContractData
 import com.chan.ui.home.model.ProductModel
 import com.chan.ui.home.repository.GoodChoiceRepository
 import com.orhanobut.logger.Logger
+import javax.inject.Inject
 
-class HomeViewModel(
+class HomeViewModel @Inject constructor(
     private val goodChoiceRepository: GoodChoiceRepository,
     private val bookmarkRepository: BookmarkRepository
 ) : BaseViewModel() {

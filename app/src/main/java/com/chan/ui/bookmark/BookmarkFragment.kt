@@ -5,24 +5,28 @@ import android.os.Handler
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.chan.MyApplication
 import com.chan.R
 import com.chan.common.base.BaseFragment
 import com.chan.common.viewmodel.BookmarkEventViewModel
 import com.chan.databinding.FragmentBookmarkBinding
+import com.chan.di.viewmodel.ViewModelFactory
 import com.chan.ui.bookmark.adapter.BookmarkAdapter
-import com.chan.ui.bookmark.local.BookmarkDataSource
-import com.chan.ui.bookmark.repository.BookmarkRepository
 import com.chan.ui.bookmark.viewmodel.BookmarkViewModel
 import com.chan.ui.detail.ProductDetailActivityContract
 import com.chan.ui.detail.ProductDetailContractData
 import com.chan.utils.showToast
 import com.orhanobut.logger.Logger
+import javax.inject.Inject
 
 class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>(
     R.layout.fragment_bookmark
 ) {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
     private val activityResultLauncher: ActivityResultLauncher<ProductDetailContractData> =
         registerForActivityResult(
             ProductDetailActivityContract()
@@ -38,6 +42,15 @@ class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>(
             }
         }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        injectionDependency()
+        super.onCreate(savedInstanceState)
+    }
+
+    private fun injectionDependency() {
+        (activity?.application as MyApplication).appComponent.inject(this)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -50,13 +63,10 @@ class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>(
 
     @Suppress("UNCHECKED_CAST")
     private fun initViewModel() {
-        binding.bookmarkViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return BookmarkViewModel(
-                    BookmarkRepository(BookmarkDataSource())
-                ) as T
-            }
-        }).get(BookmarkViewModel::class.java)
+        binding.bookmarkViewModel = ViewModelProvider(
+            this,
+            viewModelFactory
+        ).get(BookmarkViewModel::class.java)
 
         binding.bookmarkEventViewModel = activity?.let {
             ViewModelProvider(it).get(BookmarkEventViewModel::class.java)

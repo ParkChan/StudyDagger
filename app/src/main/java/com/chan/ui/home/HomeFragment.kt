@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.chan.MyApplication
 import com.chan.R
@@ -12,12 +11,11 @@ import com.chan.common.ListScrollEvent
 import com.chan.common.base.BaseFragment
 import com.chan.common.setRecyclerViewScrollListener
 import com.chan.databinding.FragmentHomeBinding
-import com.chan.ui.bookmark.repository.BookmarkRepository
+import com.chan.di.viewmodel.ViewModelFactory
 import com.chan.ui.detail.ProductDetailActivityContract
 import com.chan.ui.detail.ProductDetailContractData
 import com.chan.ui.home.adapter.ProductListAdapter
 import com.chan.ui.home.model.ProductModel
-import com.chan.ui.home.repository.GoodChoiceRepository
 import com.chan.ui.home.viewmodel.HomeViewModel
 import com.chan.utils.showToast
 import com.orhanobut.logger.Logger
@@ -28,9 +26,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 ) {
 
     @Inject
-    lateinit var goodChoiceRepository: GoodChoiceRepository
-    @Inject
-    lateinit var bookmarkRepository: BookmarkRepository
+    lateinit var viewModelFactory: ViewModelFactory
 
     private val activityResultLauncher: ActivityResultLauncher<ProductDetailContractData> =
         registerForActivityResult(
@@ -45,8 +41,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         super.onCreate(savedInstanceState)
     }
 
-    private fun injectionDependency(){
-        //Dagger to inject our dependencies
+    private fun injectionDependency() {
         (activity?.application as MyApplication).appComponent.inject(this)
     }
 
@@ -60,14 +55,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     @Suppress("UNCHECKED_CAST")
     private fun initViewModel() {
-        binding.homeViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return HomeViewModel(
-                    goodChoiceRepository,
-                    bookmarkRepository
-                ) as T
-            }
-        }).get(HomeViewModel::class.java)
+        binding.homeViewModel = ViewModelProvider(
+            this,
+            viewModelFactory
+        ).get(HomeViewModel::class.java)
 
         binding.rvProduct.adapter = ProductListAdapter(binding.homeViewModel as HomeViewModel)
     }

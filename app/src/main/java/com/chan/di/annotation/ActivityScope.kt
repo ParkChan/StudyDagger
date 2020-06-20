@@ -1,4 +1,4 @@
-package com.chan.di.scope
+package com.chan.di.annotation
 
 import javax.inject.Scope
 

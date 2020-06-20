@@ -8,16 +8,22 @@ import com.chan.common.ViewPagerAdapter
 import com.chan.common.base.BaseActivity
 import com.chan.common.viewmodel.BookmarkEventViewModel
 import com.chan.databinding.ActivityMainBinding
+import com.chan.di.viewmodel.ViewModelFactory
 import com.chan.ui.bookmark.BookmarkFragment
 import com.chan.ui.home.HomeFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.orhanobut.logger.Logger
+import javax.inject.Inject
 
 class MainActivity : BaseActivity<ActivityMainBinding>(
     R.layout.activity_main
 ) {
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        injectionDependency()
         super.onCreate(savedInstanceState)
 
         val fragmentList = listOf(HomeFragment(), BookmarkFragment())
@@ -33,7 +39,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(
         }.attach()
 
         binding.bookmarkEventViewModel =
-            ViewModelProvider(this).get(BookmarkEventViewModel::class.java)
+            ViewModelProvider(this, viewModelFactory).get(BookmarkEventViewModel::class.java)
 
         binding.viewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -48,5 +54,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(
             Logger.d("deleteProductModel observe >>> $it")
             (pagerAdapter.list[0] as HomeFragment).listUpdate(it)
         })
+    }
+
+    private fun injectionDependency() {
+        (application as MyApplication).appComponent.inject(this)
     }
 }
