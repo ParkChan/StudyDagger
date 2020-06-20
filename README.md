@@ -1,9 +1,8 @@
 # StudyDagger
 
 ### 적용 기술
-- Android JetPack Architecture
-  - Data Binding
-  - LifeCycles
+- JetPack
+  - DataBinding
   - LiveData
   - Room
   - ViewModel
