@@ -92,15 +92,18 @@ class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>(
         })
 
         //DB 리스트 조회 실패
-        binding.bookmarkViewModel?.errorMessage?.observe(viewLifecycleOwner, Observer {
-            Logger.d("bookmarkViewModel observe errorMessage $it")
-            context?.let { showToast(it, getString(R.string.common_toast_msg_network_error)) }
-        })
+        binding.bookmarkViewModel?.errorMessage?.observe(
+            viewLifecycleOwner,
+            Observer {
+                context?.let { showToast(it, getString(R.string.common_toast_msg_network_error)) }
+            })
 
-        binding.bookmarkViewModel?.sortType?.observe(viewLifecycleOwner, Observer {
-            Logger.d("bookmarkViewModel observe sortType $it")
-            selectAllBookmarkList(it)
-        })
+        binding.bookmarkViewModel?.sortType?.observe(
+            viewLifecycleOwner,
+            Observer {
+                Logger.d("bookmarkViewModel observe sortType $it")
+                selectAllBookmarkList(it)
+            })
 
         //즐겨찾기 삭제
         binding.bookmarkViewModel?.removeBookmarkModel?.observe(
@@ -117,13 +120,22 @@ class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>(
             })
 
         //상세화면에서 북마크 체크여부
-        binding.bookmarkViewModel?.existsProductModel?.observe(viewLifecycleOwner, Observer {
-            binding.bookmarkEventViewModel?.deletedObserveBookmark(it)
-        })
+        binding.bookmarkViewModel?.existsProductModel?.observe(
+            viewLifecycleOwner,
+            Observer {
+                binding.bookmarkEventViewModel?.deletedObserveBookmark(it)
+            })
 
-        binding.bookmarkViewModel?.productItemSelected?.observe(viewLifecycleOwner, Observer {
-            activityResultLauncher.launch(ProductDetailContractData(it.position, it.productModel))
-        })
+        binding.bookmarkViewModel?.productItemSelected?.observe(
+            viewLifecycleOwner,
+            Observer {
+                activityResultLauncher.launch(
+                    ProductDetailContractData(
+                        it.position,
+                        it.productModel
+                    )
+                )
+            })
     }
 
     private fun initLayout() {

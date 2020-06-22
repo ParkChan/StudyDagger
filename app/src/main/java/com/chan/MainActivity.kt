@@ -26,7 +26,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(
         injectionDependency()
         super.onCreate(savedInstanceState)
 
-        val fragmentList = listOf(HomeFragment(), BookmarkFragment())
+        val fragmentList =
+            listOf(
+                HomeFragment(),
+                BookmarkFragment()
+            )
         val pagerAdapter = ViewPagerAdapter(fragmentList, this)
 
         binding.viewpager.offscreenPageLimit = 2
@@ -39,7 +43,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(
         }.attach()
 
         binding.bookmarkEventViewModel =
-            ViewModelProvider(this, viewModelFactory).get(BookmarkEventViewModel::class.java)
+            ViewModelProvider(
+                this,
+                viewModelFactory
+            ).get(BookmarkEventViewModel::class.java)
 
         binding.viewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -50,10 +57,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(
             }
         })
 
-        binding.bookmarkEventViewModel?.deleteProductModel?.observe(this, Observer {
-            Logger.d("deleteProductModel observe >>> $it")
-            (pagerAdapter.list[0] as HomeFragment).listUpdate(it)
-        })
+        binding.bookmarkEventViewModel?.deleteProductModel?.observe(
+            this,
+            Observer {
+                Logger.d("deleteProductModel observe >>> $it")
+                (pagerAdapter.list[0] as HomeFragment).listUpdate(it)
+            })
     }
 
     private fun injectionDependency() {
